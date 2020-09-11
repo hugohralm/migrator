@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
+
 @Service
 public class QuestionarioTemplateService {
 
@@ -16,8 +19,14 @@ public class QuestionarioTemplateService {
         this.repository = repository;
     }
 
-    public QuestionarioTemplate getById(Integer id) throws Exception {
-        return repository.findById(id).orElseThrow(() -> new Exception("Não foi possível encontrar o questionario template solicitado."));
+    public QuestionarioTemplate getById(Integer id) {
+        return repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Não foi possível encontrar o questionário template solicitado."));
+    }
+
+    public void existsByDescricao(String descricao) {
+        if (repository.existsByDescricao(descricao)) {
+            throw new EntityExistsException(String.format("Questionário template [%s] ja cadastrado.", descricao));
+        }
     }
 
     @Transactional(rollbackFor = Throwable.class)

@@ -23,15 +23,16 @@ public class MigracaoService {
         this.respostaTemplateService = respostaTemplateService;
     }
 
-    public QuestionarioTemplate migrarQuestionario(Integer questionarioId) throws Exception {
+    public QuestionarioTemplate migrarQuestionario(Integer questionarioId) {
         QuestionarioTemplate questionario = questionarioTemplateService.getById(questionarioId);
+        questionarioTemplateService.existsByDescricao(questionario.getDescricao());
         QuestionarioTemplate novoQuestionario = questionarioTemplateService.migrarQuestionario(questionario);
         perguntaTemplateService.migrarPerguntasTemplate(questionario, novoQuestionario);
         respostaTemplateService.migrarRespostasTemplate(questionario, novoQuestionario);
         return novoQuestionario;
     }
 
-    public ValidaQuestionarioResponse validaQuestionario(Integer questionarioId) throws Exception {
+    public ValidaQuestionarioResponse validaQuestionario(Integer questionarioId) {
         QuestionarioTemplate questionario = questionarioTemplateService.getById(questionarioId);
         ValidaQuestionarioResponse validaResponse = new ValidaQuestionarioResponse();
         validaResponse.setQuestionarioTemplate(questionario);

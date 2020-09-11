@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,8 +26,8 @@ public class RespostaTemplateService {
         this.perguntaTemplateService = perguntaTemplateService;
     }
 
-    public RespostaTemplate getById(Integer id) throws Exception {
-        return repository.findById(id).orElseThrow(() -> new Exception("Não foi possivel encontrar a resposta template solicitada."));
+    public RespostaTemplate getById(Integer id) {
+        return repository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format("Não foi possivel encontrar a resposta template ID.%d.", id)));
     }
 
     public List<RespostaTemplate> getAllByQuestionario(QuestionarioTemplate questionario) {

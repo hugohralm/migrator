@@ -1,5 +1,6 @@
 package br.gov.go.mago.migrator.controller;
 
+import br.gov.go.mago.migrator.model.QuestionarioTemplate;
 import br.gov.go.mago.migrator.service.MigracaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,12 @@ public class QuestionarioController {
 
     @PostMapping(path = "/{id}/migrar", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getQuestionario(@PathVariable Integer id) throws Exception {
-        return ResponseEntity.status(HttpStatus.OK).body(migracaoService.migrarQuestionario(id));
+        QuestionarioTemplate questionario = migracaoService.migrarQuestionario(id);
+        if (questionario != null) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(migracaoService.migrarQuestionario(id));
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
     }
 
     @GetMapping(path = "/{id}/valida", produces = MediaType.APPLICATION_JSON_VALUE)

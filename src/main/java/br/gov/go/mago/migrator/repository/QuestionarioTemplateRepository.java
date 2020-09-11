@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface QuestionarioTemplateRepository extends JpaRepository<QuestionarioTemplate, Integer> {
     Optional<QuestionarioTemplate> findById(Integer id);
+
+    boolean existsByDescricao(String descricao);
 }
