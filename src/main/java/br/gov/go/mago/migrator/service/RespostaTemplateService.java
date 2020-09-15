@@ -40,11 +40,12 @@ public class RespostaTemplateService {
 
     @Transactional(rollbackFor = Throwable.class)
     public void migrarRespostasTemplate(QuestionarioTemplate questionario, QuestionarioTemplate novoQuestionario) {
-        Optional<PerguntaTemplate> proximaPergunta = Optional.empty();
+        Optional<PerguntaTemplate> proximaPergunta;
         List<RespostaTemplate> respostas = getAllByQuestionario(questionario);
         List<PerguntaTemplate> novasPerguntas = perguntaTemplateService.getAllByQuestionario(novoQuestionario);
         for (RespostaTemplate resposta : respostas) {
             Optional<PerguntaTemplate> perguntaTemplate = novasPerguntas.stream().filter(pergunta -> pergunta.equalsNovaPergunta(resposta.getPerguntaTemplate())).findFirst();
+            proximaPergunta = Optional.empty();
             if (perguntaTemplate.isPresent()) {
                 PerguntaTemplate proximaPerguntaResposta = resposta.getProximaPergunta();
                 if (proximaPerguntaResposta != null) {

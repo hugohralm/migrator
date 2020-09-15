@@ -3,6 +3,7 @@ package br.gov.go.mago.migrator.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -52,16 +53,20 @@ public class RespostaTemplate implements Serializable {
     @JoinColumn(name = "proximapergunta_id")
     private PerguntaTemplate proximaPergunta;
 
+    @Column(name = "respostatemplatemigrada")
+    private Integer respostaTemplateMigrada;
+
     public RespostaTemplate(RespostaTemplate resposta, PerguntaTemplate perguntaTemplate, PerguntaTemplate proximaPergunta) {
         this.id = null;
         this.perguntaTemplate = perguntaTemplate;
         this.descricao = resposta.getDescricao().toUpperCase().trim();
         this.indice = resposta.getIndice();
-        this.mensagem = resposta.getMensagem() != null ? resposta.getMensagem().trim() : null;
-        this.dica = resposta.getDica() != null ? resposta.getDica().trim() : null;
-        this.textoLicenca = resposta.getTextoLicenca() != null ? resposta.getTextoLicenca().trim() : null;
+        this.mensagem = StringUtils.isBlank(resposta.getMensagem()) ? null : resposta.getMensagem().trim();
+        this.dica = StringUtils.isBlank(resposta.getDica()) ? null : resposta.getDica().trim();
+        this.textoLicenca = StringUtils.isBlank(resposta.getTextoLicenca()) ? null : resposta.getTextoLicenca().trim()  ;
         this.dataCadastro = new Date();
         this.impeditiva = resposta.isImpeditiva();
         this.proximaPergunta = proximaPergunta;
+        this.respostaTemplateMigrada = resposta.getId();
     }
 }
