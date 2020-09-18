@@ -79,8 +79,9 @@ public class Consequencia implements Serializable {
     @JoinColumn(name = "modeloautorizacao_id")
     private ModeloDeclaracao modeloAutorizacao;
 
-    public Consequencia(String tipoConsequencia) {
+    public Consequencia(String tipoConsequencia, String responsavelTecnico) {
         this.tipoConsequencia = tipoConsequencia;
+        this.responsavelTecnico = responsavelTecnico;
         this.dataCadastro = new Date();
     }
 }

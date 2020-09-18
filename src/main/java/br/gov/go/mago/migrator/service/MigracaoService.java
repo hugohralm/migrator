@@ -1,9 +1,14 @@
 package br.gov.go.mago.migrator.service;
 
+import br.gov.go.mago.migrator.model.Consequencia;
 import br.gov.go.mago.migrator.model.QuestionarioTemplate;
+import br.gov.go.mago.migrator.model.RespostaTemplate;
 import br.gov.go.mago.migrator.model.contract.ValidaQuestionarioResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MigracaoService {
@@ -27,18 +32,18 @@ public class MigracaoService {
         this.consequenciaService = consequenciaService;
     }
 
-    public QuestionarioTemplate migrarQuestionario(Integer questionarioId) {
-        QuestionarioTemplate novoQuestionario = createQuestionario(questionarioId);
-        consequenciaService.migrarConsequenciaResposta(novoQuestionario);
-        return novoQuestionario;
+    public QuestionarioTemplate migrarQuestionario(List<RespostaTemplate> respostas) {
+        return createQuestionario(respostas);
     }
 
-    private QuestionarioTemplate createQuestionario(Integer questionarioId) {
-        QuestionarioTemplate questionario = questionarioTemplateService.getById(questionarioId);
-//        questionarioTemplateService.existsByDescricao(questionario.getDescricao());
-        QuestionarioTemplate novoQuestionario = questionarioTemplateService.migrarQuestionario(questionario);
-        perguntaTemplateService.migrarPerguntasTemplate(questionario, novoQuestionario);
-        respostaTemplateService.migrarRespostasTemplate(questionario, novoQuestionario);
+    private QuestionarioTemplate createQuestionario(List<RespostaTemplate> respostas) {
+        QuestionarioTemplate novoQuestionario = null;
+        Optional<QuestionarioTemplate> questionarioOpt = respostas.stream().map(rt -> rt.getPerguntaTemplate().getQuestionarioTemplate()).findFirst();
+        if (questionarioOpt.isPresent()) {
+            novoQuestionario = questionarioTemplateService.migrarQuestionario(questionarioOpt.get());
+            perguntaTemplateService.migrarNovasPerguntasTemplate(respostas, novoQuestionario);
+            respostaTemplateService.migrarNovasRespostasTemplate(respostas, novoQuestionario);
+        }
         return novoQuestionario;
     }
 
@@ -48,6 +53,12 @@ public class MigracaoService {
         validaResponse.setQuestionarioTemplate(questionario);
         validaResponse.setPossuiPergunta(perguntaTemplateService.existsByQuestionarioTemplate(questionario));
         validaResponse.setPossuiResposta(respostaTemplateService.existsByPerguntaTemplateQuestionarioTemplate(questionario));
+        validaResponse.setPossuiConsequencia(consequenciaService.existsByRespostaTemplatePerguntaTemplateQuestionarioTemplate(questionario));
         return validaResponse;
+    }
+
+    public QuestionarioTemplate migrarConsequencias(QuestionarioTemplate questionario, List<Consequencia> consequencias) {
+        consequenciaService.migrarConsequenciaResposta(consequencias, questionario);
+        return questionario;
     }
 }

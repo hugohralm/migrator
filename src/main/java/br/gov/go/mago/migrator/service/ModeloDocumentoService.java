@@ -1,7 +1,6 @@
 package br.gov.go.mago.migrator.service;
 
 import br.gov.go.mago.migrator.model.ModeloDocumento;
-import br.gov.go.mago.migrator.model.ModeloTermo;
 import br.gov.go.mago.migrator.repository.ModeloDocumentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +22,7 @@ public class ModeloDocumentoService {
     public ModeloDocumento getOrCreateByDescricao(ModeloDocumento modeloDocumento) {
         if (modeloDocumento != null) {
             Optional<ModeloDocumento> documento = repository.findFirstByDescricaoOrderById(modeloDocumento.getDescricao());
-            return documento.orElseGet(() -> repository.save(new ModeloTermo(modeloTermo)));
+            return documento.orElseGet(() -> repository.save(new ModeloDocumento(modeloDocumento)));
         } else {
             return null;
         }

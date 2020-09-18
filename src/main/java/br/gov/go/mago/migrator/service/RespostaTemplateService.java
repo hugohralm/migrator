@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,10 +26,6 @@ public class RespostaTemplateService {
         this.perguntaTemplateService = perguntaTemplateService;
     }
 
-    public RespostaTemplate getById(Integer id) {
-        return repository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format("Não foi possivel encontrar a resposta template ID.%d.", id)));
-    }
-
     public List<RespostaTemplate> getAllByQuestionario(QuestionarioTemplate questionario) {
         return repository.findAllByPerguntaTemplateQuestionarioTemplateOrderByPerguntaTemplate(questionario);
     }
@@ -39,9 +35,9 @@ public class RespostaTemplateService {
     }
 
     @Transactional(rollbackFor = Throwable.class)
-    public void migrarRespostasTemplate(QuestionarioTemplate questionario, QuestionarioTemplate novoQuestionario) {
+    public void migrarNovasRespostasTemplate(List<RespostaTemplate> respostas, QuestionarioTemplate novoQuestionario) {
+        respostas.sort(Comparator.comparing(RespostaTemplate::getId));
         Optional<PerguntaTemplate> proximaPergunta;
-        List<RespostaTemplate> respostas = getAllByQuestionario(questionario);
         List<PerguntaTemplate> novasPerguntas = perguntaTemplateService.getAllByQuestionario(novoQuestionario);
         for (RespostaTemplate resposta : respostas) {
             Optional<PerguntaTemplate> perguntaTemplate = novasPerguntas.stream().filter(pergunta -> pergunta.equalsNovaPergunta(resposta.getPerguntaTemplate())).findFirst();
