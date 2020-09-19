@@ -33,4 +33,12 @@ public class AutorizacaoProibicao implements Serializable {
     @Column(name = "dataexclusao")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dataExclusao;
+
+    public AutorizacaoProibicao(AutorizacaoProibicao autorizacaoProibicao) {
+        this.id = null;
+        this.descricao = autorizacaoProibicao.getDescricao();
+        this.tipo = autorizacaoProibicao.getTipo();
+        this.dataCadastro = new Date();
+        this.dataExclusao = null;
+    }
 }

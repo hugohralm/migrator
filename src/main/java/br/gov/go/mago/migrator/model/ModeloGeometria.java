@@ -24,4 +24,10 @@ public class ModeloGeometria implements Serializable {
     private String nome;
 
     private String tipo;
+
+    public ModeloGeometria(ModeloGeometria modeloGeometria) {
+        this.id = null;
+        this.nome = modeloGeometria.getNome();
+        this.tipo = modeloGeometria.getTipo();
+    }
 }

@@ -35,4 +35,13 @@ public class ParametroTemplate implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "dataexclusao")
     private Date dataExclusao;
+
+    public ParametroTemplate(ParametroTemplate parametroTemplate) {
+        this.id = null;
+        this.tipo = parametroTemplate.getTipo();
+        this.descricao = parametroTemplate.getDescricao();
+        this.detalhes = parametroTemplate.getDetalhes();
+        this.dataCadastro = new Date();
+        this.dataExclusao = null;
+    }
 }
