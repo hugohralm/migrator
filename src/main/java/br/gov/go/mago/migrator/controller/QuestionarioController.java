@@ -4,7 +4,7 @@ import br.gov.go.mago.migrator.model.Consequencia;
 import br.gov.go.mago.migrator.model.QuestionarioTemplate;
 import br.gov.go.mago.migrator.model.RespostaTemplate;
 import br.gov.go.mago.migrator.service.ConsequenciaService;
-import br.gov.go.mago.migrator.service.MigracaoService;
+import br.gov.go.mago.migrator.service.MigracaoQuestionarioService;
 import br.gov.go.mago.migrator.service.QuestionarioTemplateService;
 import br.gov.go.mago.migrator.service.RespostaTemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import java.util.List;
 @RequestMapping("/api/questionarios")
 public class QuestionarioController {
 
-    private final MigracaoService migracaoService;
+    private final MigracaoQuestionarioService migracaoService;
 
     private final RespostaTemplateService respostaTemplateService;
 
@@ -28,7 +28,7 @@ public class QuestionarioController {
     private final QuestionarioTemplateService questionarioTemplateService;
 
     @Autowired
-    public QuestionarioController(MigracaoService migracaoService,
+    public QuestionarioController(MigracaoQuestionarioService migracaoService,
                                   QuestionarioTemplateService questionarioTemplateService,
                                   RespostaTemplateService respostaTemplateService,
                                   ConsequenciaService consequenciaService) {

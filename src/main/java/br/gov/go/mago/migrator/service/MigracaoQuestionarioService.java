@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class MigracaoService {
+public class MigracaoQuestionarioService {
 
     private final QuestionarioTemplateService questionarioTemplateService;
 
@@ -22,7 +22,7 @@ public class MigracaoService {
     private final ConsequenciaService consequenciaService;
 
     @Autowired
-    public MigracaoService(QuestionarioTemplateService questionarioTemplateService,
+    public MigracaoQuestionarioService(QuestionarioTemplateService questionarioTemplateService,
                            PerguntaTemplateService perguntaTemplateService,
                            RespostaTemplateService respostaTemplateService,
                            ConsequenciaService consequenciaService) {
