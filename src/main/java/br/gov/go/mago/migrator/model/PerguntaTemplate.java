@@ -48,7 +48,7 @@ public class PerguntaTemplate implements Serializable {
 
     public boolean equalsNovaPergunta(PerguntaTemplate pergunta) {
         return Objects.equals(this.indice, pergunta.getIndice()) &&
-                Objects.equals(this.codigo, pergunta.getCodigo()) &&
-                Objects.equals(this.descricao, pergunta.getDescricao());
+                Objects.equals(this.codigo, pergunta.getCodigo().trim()) &&
+                Objects.equals(this.descricao, pergunta.getDescricao().toUpperCase().trim());
     }
 }
